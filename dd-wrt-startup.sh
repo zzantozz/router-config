@@ -5,8 +5,9 @@ logger -t STARTUP_SCRIPT "Begin startup script"
 # Take care of well-known DNS ports
 iptables -t nat -I PREROUTING -i br0 -p udp --dport 53 -j REDIRECT --to-ports 53 -m comment --comment "Keep all DNS local"
 iptables -t nat -I PREROUTING -i br0 -p tcp --dport 53 -j REDIRECT --to-ports 53 -m comment --comment "Keep all DNS local"
-iptables -I FORWARD -p tcp --dport 853 -j REJECT -m comment --comment "Block DNS over TLS"
-iptables -I FORWARD -p udp --dport 853 -j REJECT -m comment --comment "Block DNS over TLS"
+# Insert these after the "accept related,established" rule
+iptables -I FORWARD 2 -p tcp --dport 853 -j REJECT -m comment --comment "Block DNS over TLS"
+iptables -I FORWARD 2 -p udp --dport 853 -j REJECT -m comment --comment "Block DNS over TLS"
 
 logger -t STARTUP_SCRIPT "Backgrounding startup"
 
