@@ -15,7 +15,7 @@ chain_new="${chain}_NEW"
 # Ensure the new chain is there and/or empty
 iptables -N "$chain_new" || iptables -F "$chain_new"
 
-wget -q -O - "$url" | while read -r ip; do
+curl -sL "$url" | while read -r ip; do
     case "$ip" in
         ''|\#*) continue ;;
     esac
