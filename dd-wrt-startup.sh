@@ -1,7 +1,16 @@
 #!/bin/sh
 
+logger -t STARTUP_SCRIPT "Begin startup script"
+
+# Take care of well-known DNS ports
+iptables -t nat -I PREROUTING -i br0 -p udp --dport 53 -j REDIRECT --to-ports 53 -m comment --comment "Keep all DNS local"
+iptables -t nat -I PREROUTING -i br0 -p tcp --dport 53 -j REDIRECT --to-ports 53 -m comment --comment "Keep all DNS local"
+iptables -I FORWARD -p tcp --dport 853 -j REJECT -m comment --comment "Block DNS over TLS"
+iptables -I FORWARD -p udp --dport 853 -j REJECT -m comment --comment "Block DNS over TLS"
+
 logger -t STARTUP_SCRIPT "Backgrounding startup"
 
+# Now block known DNS over HTTP addresses. Background because this takes a while.
 (
 url="https://raw.githubusercontent.com/zzantozz/router-config/refs/heads/master/load-doh-ips.sh"
 expected_sha="ec78f775cb77cccbe364dd0d7e5ac4dab59aea04"
