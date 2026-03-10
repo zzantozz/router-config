@@ -12,9 +12,12 @@ url="https://raw.githubusercontent.com/hagezi/dns-blocklists/main/ips/doh.txt"
 chain="DOH_BLOCK"
 chain_new="${chain}_NEW"
 
+logger -t DOH_SCRIPT "Running DOH script"
+
 # Ensure the new chain is there and/or empty
 iptables -N "$chain_new" || iptables -F "$chain_new"
 
+logger -t DOH_SCRIPT "Add all DOH IPs"
 curl -sL "$url" | while read -r ip; do
     case "$ip" in
         ''|\#*) continue ;;
@@ -23,6 +26,7 @@ curl -sL "$url" | while read -r ip; do
     iptables -A "$chain_new" -d "$ip" -p udp --dport 443 -j REJECT
 done
 
+logger -t DOH_SCRIPT "Swap chains and clean up old"
 # Update FORWARD to use the new chain instead of the old one
 iptables -I FORWARD 2 -m comment --comment "Block DoH providers" -j "$chain_new"
 iptables -D FORWARD -j "$chain" 2>/dev/null

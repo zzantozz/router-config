@@ -10,9 +10,9 @@ logger -t STARTUP_SCRIPT "Waiting for github"
 until ping -c1 github.com > /dev/null 2>&1; do sleep 2; done
 
 logger -t STARTUP_SCRIPT "Downloading necessary script"
-curl -sLo -O /tmp/load-doh-ips.sh "$url"
+curl -sLo /tmp/load-doh-ips.sh "$url"
 
-echo "$expected_sha  /tmp/load-doh-ips.sh" | sha1sum -c - || {
+echo "$expected_sha  /tmp/load-doh-ips.sh" | sha1sum - || {
     logger -t STARTUP_SCRIPT "Checksum verification failed"
     rm -f /tmp/load-doh-ips.sh
     exit 1
