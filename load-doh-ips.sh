@@ -29,7 +29,7 @@ done
 logger -t DOH_SCRIPT "Swap chains and clean up old"
 # Update FORWARD to use the new chain instead of the old one
 iptables -I FORWARD 2 -m comment --comment "Block DoH providers" -j "$chain_new"
-iptables -D FORWARD -j "$chain" 2>/dev/null
+iptables -D FORWARD -j "$chain" -m comment --comment "Block DoH providers" 2>/dev/null
 iptables -F "$chain" 2>/dev/null
 iptables -X "$chain" 2>/dev/null
 iptables -E "$chain_new" "$chain"
