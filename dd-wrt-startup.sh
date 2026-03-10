@@ -23,5 +23,5 @@ sh /tmp/load-doh-ips.sh
 
 logger -t STARTUP_SCRIPT "Adding script to future cron"
 # Also run this periodically for this session.
-echo '0 * * * * root sh /tmp/load-doh-ips.sh' >> /tmp/cron.d/cron_jobs
+echo '0 5 * * * root sh /tmp/load-doh-ips.sh' >> /tmp/cron.d/cron_jobs
 ) &
