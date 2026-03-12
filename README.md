@@ -28,6 +28,12 @@ fact and might miss something.
 
 - Set the startup script from this repo in Administration > Commands
 
+- Get the healthchecks.io URL and save it as an env var in the custom script like
+
+    ```
+    HC_URL="<url here>"
+    ```
+
 - Enable cron in Administration > Management, or the periodic update won't run
 
 - For debugging, turn on syslog in Services > Services

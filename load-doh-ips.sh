@@ -8,6 +8,9 @@
 # Streams and processes data line by line — never loads the full list
 # into memory or stores it on disk.
 
+# Notify healthchecks.io of script start if the secret(-ish) URL is configured in the env.
+[ -n "$HC_URL" ] && curl "$HC_URL/start"
+
 url="https://raw.githubusercontent.com/hagezi/dns-blocklists/main/ips/doh.txt"
 chain="DOH_BLOCK"
 chain_new="${chain}_NEW"
@@ -33,3 +36,6 @@ iptables -D FORWARD -j "$chain" -m comment --comment "Block DoH providers" 2>/de
 iptables -F "$chain" 2>/dev/null
 iptables -X "$chain" 2>/dev/null
 iptables -E "$chain_new" "$chain"
+
+# Notify helathchecks.io of success
+[ -n "$HC_URL" ] && curl "$HC_URL"
