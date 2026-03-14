@@ -4,19 +4,12 @@ logger -t STARTUP_SCRIPT "Begin startup script"
 
 [ -f /tmp/.rc_custom ] && source /tmp/.rc_custom
 
-# Take care of well-known DNS ports
-iptables -t nat -I PREROUTING -i br0 -p udp --dport 53 -j REDIRECT --to-ports 53 -m comment --comment "Keep all DNS local"
-iptables -t nat -I PREROUTING -i br0 -p tcp --dport 53 -j REDIRECT --to-ports 53 -m comment --comment "Keep all DNS local"
-# Insert these after the "accept related,established" rule
-iptables -I FORWARD 2 -p tcp --dport 853 -j REJECT -m comment --comment "Block DNS over TLS"
-iptables -I FORWARD 2 -p udp --dport 853 -j REJECT -m comment --comment "Block DNS over TLS"
-
 logger -t STARTUP_SCRIPT "Backgrounding startup"
 
 # Now block known DNS over HTTP addresses. Background because this takes a while.
 (
 url="https://raw.githubusercontent.com/zzantozz/router-config/refs/heads/master/load-doh-ips.sh"
-expected_sha="55284ac7e392ab088246557bc0fbb0411a1253c5"
+expected_sha="c6e9736d5233575fa3d3b425c562e5c738afdfc5"
 
 logger -t STARTUP_SCRIPT "Waiting for github"
 until ping -c1 github.com > /dev/null 2>&1; do sleep 2; done

@@ -24,6 +24,17 @@ fact and might miss something.
 
 - Check "Ignore WAN DNS" on the Basic Setup page, or else it includes the upstream DNS
 
+- Check "Forced DNS Redirection" and "Forced DNS Redirection DoT" under DHCP settings, or else set up iptables rules manually:
+
+    ```
+    # Take care of well-known DNS ports
+    iptables -t nat -I PREROUTING -i br0 -p udp --dport 53 -j REDIRECT --to-ports 53 -m comment --comment "Keep all DNS local"
+    iptables -t nat -I PREROUTING -i br0 -p tcp --dport 53 -j REDIRECT --to-ports 53 -m comment --comment "Keep all DNS local"
+    # Insert these after the "accept related,established" rule
+    iptables -I FORWARD 2 -p tcp --dport 853 -j REJECT -m comment --comment "Block DNS over TLS"
+    iptables -I FORWARD 2 -p udp --dport 853 -j REJECT -m comment --comment "Block DNS over TLS"
+    ```
+
 - Check that IPv6 is disabled (was by default I think)
 
 - Set the startup script from this repo in Administration > Commands
