@@ -25,7 +25,7 @@ logger -t STARTUP_SCRIPT "Downloading necessary script"
 curl -sLo /tmp/load-doh-ips.sh "$url"
 
 check="$(sha1sum /tmp/load-doh-ips.sh)"
-[ "$check" = '870ee1158424c78e82e02604061c8b92289af896  /tmp/load-doh-ips.sh' ] || {
+[ "$check" = "$expected_sha  /tmp/load-doh-ips.sh" ] || {
     logger -t STARTUP_SCRIPT "Checksum verification failed"
     rm -f /tmp/load-doh-ips.sh
     exit 1
