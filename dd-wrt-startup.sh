@@ -9,7 +9,7 @@ logger -t STARTUP_SCRIPT "Backgrounding startup"
 # Now block known DNS over HTTP addresses. Background because this takes a while.
 (
 url="https://raw.githubusercontent.com/zzantozz/router-config/refs/heads/master/load-doh-ips.sh"
-expected_sha="c6e9736d5233575fa3d3b425c562e5c738afdfc5"
+expected_sha="89608a2f77a1b9b743e351eec45012c4f34c8161"
 
 logger -t STARTUP_SCRIPT "Waiting for github"
 until ping -c1 github.com > /dev/null 2>&1; do sleep 2; done
