@@ -1,12 +1,12 @@
 # Router config
 
 This starts off as a really simple place to store some DD-WRT config stuff. I needed a place to store a script
-that the router can download at startup, and github works nicely.
+that the router can download, and github works nicely.
 
 All it is right now is a simple script to read in a list of DNS-over-HTTP IP addresses from another github repo
 and load those IPs into an iptables chain to prevent any DoH use.
 
-The other script is just the startup script that sets a few rules and gets the first script up and running.
+The other script is just the custom script that sets a few rules and gets the first script up and running.
 
 ## Goal
 
@@ -37,7 +37,8 @@ fact and might miss something.
 
 - Check that IPv6 is disabled (was by default I think)
 
-- Set the startup script from this repo in Administration > Commands
+- Copy the contents of the "firewall" script into the textbox in Administration > Commands, and "Save Firewall". This makes
+  it run anytime the firewall is restarted, which is fairly often, like at least every time you do a "Save & Apply".
 
 - Get the healthchecks.io URL and save it as an env var in the custom script like
 
